@@ -127,7 +127,7 @@ graph::graph(void) :
 {}
 
 // copy constructor
-graph::graph(const graph& other) :
+graph::graph(const graph & other) :
 	id_counter(other.id_counter)
 {
 	// since we're using STL object with assignment
@@ -166,7 +166,7 @@ bool graph::addEdge(int from, int to) {
 	return true;
 }
 
-int graph::addVertex(const std::string& label) {
+int graph::addVertex(const std::string & label) {
 	// get new ID
 	int id = id_counter++;
 	// add to vertex list
@@ -196,14 +196,34 @@ std::vector<int> graph::dfs(int start) {
 	}
 	return result;
 }
-//std::vector<int> graph::bfs(int start) const;
 
+std::vector<int> graph::bfs(int start) {
+	std::deque<int> todo;
+	std::vector<int> result;
+	todo.push_back(start);
+	vertex_list[start].visited = true;
+	while (!todo.empty()) {
+		size_t from = todo.front();
+		todo.pop_front();
+		result.push_back(int(from));
+		// adj[0] -> std::vector<int> : (3,4,5)
+		for (size_t to = from + 1; to < adj[from].size(); to++) {
+			if (adj[from][to] != INFTY) {
+				if (!vertex_list[to].visited) {
+					todo.push_back(to);
+					vertex_list[to].visited = true;
+				}
+			}
+		}
+	}
+	return result;
+}
 
 std::vector<vertex> graph::get_vertices(void) const {
 	return vertex_list;
 }
 
-std::ostream& operator<<(std::ostream& stream, const graph& G) {
+std::ostream& operator<<(std::ostream & stream, const graph & G) {
 	std::cout << "The graph has " << G.nVertices() << " vertices." << std::endl;
 	auto edges = G.get_edges();
 	std::cout << "The graph has " << edges.size() << " edges." << std::endl;
@@ -259,8 +279,8 @@ int main(int argc, char** argv) {
 	for (const auto& e : edges) G.addEdge(e.from, e.to);
 	std::cout << G << std::endl;
 
-	auto result = G.dfs(0);
-	std::cout << "DFS" << std::endl;
+	auto result = G.bfs(0);
+	std::cout << "BFS" << std::endl;
 	auto vertices = G.get_vertices();
 	for (const auto& id : result) {
 		std::cout << vertices[id] << std::endl;
