@@ -112,10 +112,8 @@ std::vector<std::pair<int, int> > graph::get_edges(void) const {
 		// this is an undirected graph.
 		// the adjacency matrix is symmetric.
 		// it is sufficient to only look at half the matrix.
-		for (size_t k = n + 1; k < adj[n].size(); k++) {
-			if (get_weight(n, k) != INFTY) {
-				result.push_back(std::make_pair(int(n), int(k)));
-			}
+		for (size_t k = 0; k < adj[n].size(); k++) {
+			result.push_back(std::make_pair(int(n), int(adj[n][k])));
 		}
 	}
 	return result;
@@ -153,16 +151,7 @@ bool graph::addEdge(int from, int to) {
 
 	// append -1s at the end of adj[from] (inner vector)
 	// such that we have an 
-	for (size_t n = adj[from].size(); n <= to; n++)
-		adj[from].push_back(INFTY);
-	// now we know that adj[from] has enough "slots"
-	adj[from][to] = 1;
-
-	// repeat for adj[to]: This we need to do only
-	// for an undirected graph
-	for (size_t n = adj[to].size(); n <= from; n++)
-		adj[to].push_back(INFTY);
-	adj[to][from] = 1;
+	adj[from].push_back(to);
 	return true;
 }
 
@@ -187,12 +176,10 @@ std::vector<int> graph::dfs(int start) {
 		todo.pop_back();
 		result.push_back(int(from));
 		// adj[0] -> std::vector<int> : (3,4,5)
-		for (size_t to = adj[from].size() - 1; to > from; to--) {
-			if (adj[from][to] != INFTY) {
-				if (!vertex_list[to].visited) {
-					todo.push_back(to);
-					vertex_list[to].visited = true;
-				}
+		for (int to = adj[from].size() - 1; to >= 0; to--) {
+			if (!vertex_list[adj[from][to]].visited) {
+				vertex_list[adj[from][to]].visited = true;
+				todo.push_back(adj[from][to]);
 			}
 		}
 	}
@@ -211,12 +198,10 @@ std::vector<int> graph::bfs(int start) {
 		todo.pop_front();
 		result.push_back(int(from));
 		// adj[0] -> std::vector<int> : (3,4,5)
-		for (size_t to = from + 1; to < adj[from].size(); to++) {
-			if (adj[from][to] != INFTY) {
-				if (!vertex_list[to].visited) {
-					todo.push_back(to);
-					vertex_list[to].visited = true;
-				}
+		for (size_t to = 0; to < adj[from].size(); to++) {
+			if (!vertex_list[adj[from][to]].visited) {
+				vertex_list[adj[from][to]].visited = true;
+				todo.push_back(adj[from][to]);
 			}
 		}
 	}
