@@ -178,6 +178,8 @@ int graph::addVertex(const std::string & label) {
 std::vector<int> graph::dfs(int start) {
 	std::deque<int> todo;
 	std::vector<int> result;
+	for (size_t i = 0; i < vertex_list.size(); i++)
+		vertex_list[i].visited = false;
 	todo.push_back(start);
 	vertex_list[start].visited = true;
 	while (!todo.empty()) {
@@ -200,6 +202,8 @@ std::vector<int> graph::dfs(int start) {
 std::vector<int> graph::bfs(int start) {
 	std::deque<int> todo;
 	std::vector<int> result;
+	for (size_t i = 0; i < vertex_list.size(); i++)
+		vertex_list[i].visited = false;
 	todo.push_back(start);
 	vertex_list[start].visited = true;
 	while (!todo.empty()) {
@@ -279,11 +283,18 @@ int main(int argc, char** argv) {
 	for (const auto& e : edges) G.addEdge(e.from, e.to);
 	std::cout << G << std::endl;
 
-	auto result = G.bfs(0);
-	std::cout << "BFS" << std::endl;
+	auto resultDFS = G.dfs(0);
+	std::cout << "DFS" << std::endl;
 	auto vertices = G.get_vertices();
-	for (const auto& id : result) {
-		std::cout << vertices[id] << std::endl;
+	for (const auto& idDFS : resultDFS) {
+		std::cout << vertices[idDFS] << std::endl;
 	}
+
+	auto resultBFS = G.bfs(0);
+	std::cout << "BFS" << std::endl;
+	for (const auto& idBFS : resultBFS) {
+		std::cout << vertices[idBFS] << std::endl;
+	}
+
 	return 0;
 }
