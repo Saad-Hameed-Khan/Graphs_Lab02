@@ -187,7 +187,7 @@ std::vector<int> graph::dfs(int start) {
 		todo.pop_back();
 		result.push_back(int(from));
 		// adj[0] -> std::vector<int> : (3,4,5)
-		for (size_t to = from + 1; to < adj[from].size(); to++) {
+		for (size_t to = adj[from].size() - 1; to > from; to--) {
 			if (adj[from][to] != INFTY) {
 				if (!vertex_list[to].visited) {
 					todo.push_back(to);
