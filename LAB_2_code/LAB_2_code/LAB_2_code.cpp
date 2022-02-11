@@ -248,7 +248,8 @@ std::ostream& operator<<(std::ostream & stream, const graph & G) {
 int main(int argc, char** argv) {
 	// initialization can be done like this:
 
-	std::vector<std::string> vtx({ "A","B","C","D","E" });
+	//std::vector<std::string> vtx({ "A","B","C","D","E" });
+	std::vector<std::string> vtx({ "A","B","C","D","E","F","G","H","I" });
 	graph G;
 	std::vector<int> vertex_ids;
 	for (const auto& elem : vtx) {
@@ -259,11 +260,19 @@ int main(int argc, char** argv) {
 		edge(int i, int j) : from(i), to(j) {}
 		int from, to;
 	};
+	/*
 	std::vector<edge> edges({
 		edge(0,1), edge(0,3),
 		edge(1,2), edge(1,3), edge(1,4),
 		edge(2,4), edge(2,3),
 		edge(3,4)
+		}); */
+	std::vector<edge> edges({
+		edge(0,1), edge(0,2), edge(0,3), edge(0,4),
+		edge(1,5),
+		edge(3,6),
+		edge(5,7),
+		edge(6,8),
 		});
 	// TODO 1: Change adjacency to adjacency list
 	//         Mind the for loops
