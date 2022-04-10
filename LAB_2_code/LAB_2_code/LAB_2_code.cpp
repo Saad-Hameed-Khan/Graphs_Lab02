@@ -13,6 +13,7 @@ struct vertex {
 	vertex(const vertex& v);		// copy constructor
 	~vertex(void);					// destructor - nothing to do
 	bool visited;					// flag if vertex has been visited
+	vertex& inVertex;
 	std::string label;				// variable to store the label
 };
 
